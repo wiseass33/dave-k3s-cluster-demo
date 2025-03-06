@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+<include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+<springProperty scope="context" name="eurekaserver" source="spring.application.name"/>
+	<property name="USER_HOME" value="/app" />	
+
+	<property name="OUTPUT_LOG_PATTERN"
+		value="%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}" />
+
+	<!-- Console appenders -->
+	<appender name="STDOUT"
+		class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>${OUTPUT_LOG_PATTERN}</pattern>
+		</encoder>
+	</appender>
+
+	<!-- File appenders -->
+	<appender name="FILE-AUDIT"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${USER_HOME}/platformconfigserver.log</file>
+		<encoder>
+			<pattern>${OUTPUT_LOG_PATTERN}</pattern>
+		</encoder>
+
+		<rollingPolicy
+			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- Roll-over daily -->
+			<fileNamePattern>${USER_HOME}/archived/platformconfigserver.%d{yyyy-MM-dd}.log
+			</fileNamePattern>
+			<maxHistory>90</maxHistory>
+			<totalSizeCap>10MB</totalSizeCap>
+		</rollingPolicy>
+
+	</appender>
+
+
+	<logger name="com.telus.health.hbm.platform.core.eurekaserver" level="debug"
+		additivity="false">
+			<appender-ref ref="STDOUT" />
+			<appender-ref ref="FILE-AUDIT" />
+	</logger>
+
+	<logger name="org.springframework.web.filter.CommonsRequestLoggingFilter">
+ 		<appender-ref ref="STDOUT"/>
+ 		
+	</logger>
+
+	<root level="error">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="FILE-AUDIT" />
+	</root>
+</configuration>
