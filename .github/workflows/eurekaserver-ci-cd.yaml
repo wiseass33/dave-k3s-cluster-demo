@@ -1,10 +1,10 @@
-name: Platform Eureka Server CICD Workflow .
-run-name: platformeurekaserver Pipeline
+name: Eureka Server CICD Workflow .
+run-name: eurekaserver Pipeline
 on:
   workflow_dispatch:  
 
 jobs:
   get_runners_details:
     name: Fetch Runner Details
-    uses: .github/workflows/fetch_runner_details.yml
+    uses: .github/workflows/fetch_runner_details.yaml
     secrets: inherit
