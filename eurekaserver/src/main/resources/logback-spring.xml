@@ -35,7 +35,7 @@
 	</appender>
 
 
-	<logger name="com.telus.health.hbm.platform.core.eurekaserver" level="debug"
+	<logger name="com.wisemangroup.eurekaserver" level="debug"
 		additivity="false">
 			<appender-ref ref="STDOUT" />
 			<appender-ref ref="FILE-AUDIT" />

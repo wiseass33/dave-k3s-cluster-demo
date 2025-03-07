@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: platformeurekaserver
+  profiles:
+    active: dev
+
+server:
+  port: 8761
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    registerWithEureka: false    # don't register with yourself
+    fetchRegistry: false         # don't fetch registry info
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+  server:
+    waitTimeInMsWhenSyncEmpty: 0
+    enableSelfPreservation: false  # note the correct property name
