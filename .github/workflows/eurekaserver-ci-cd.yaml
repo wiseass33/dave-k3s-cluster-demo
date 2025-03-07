@@ -1,0 +1,78 @@
+name: Platform Eureka Server CICD Workflow .
+run-name: platformeurekaserver Pipeline
+on:
+  workflow_dispatch:  
+
+jobs:
+  get_runners_details:
+    name: Fetch Runner Details
+    uses: ./.github/workflows/fetch_runner_details.yml
+    secrets: inherit
+
+  build-package:
+    needs: [get_runners_details]
+    uses: telus-health/th-enablement-actions/.github/workflows/maven-build-package-ci.yaml@master
+    with:
+      runner_name: ${{ needs.get_runners_details.outputs.runner_dev }}
+      needs_docker_push: true
+      needs_maven_build: true
+      env_vars_file: platformeurekaserver
+      maven_phases: clean package
+      maven_properties: -DskipTests=true
+    secrets: inherit  
+
+  deploy-dev:
+    needs: [get_runners_details, build-package]
+    uses: telus-health/th-enablement-actions/.github/workflows/deploy-to-ocp-cd.yaml@master
+    with:
+      runner_name: ${{ needs.get_runners_details.outputs.runner_dev }}
+      IMAGE_TAG: ${{ needs.build-package.outputs.IMAGE_TAG }}
+      maint_windows_check: false
+      environment_value: dev
+      env_vars_file: platformeurekaserver
+    secrets: inherit
+
+  deploy-qa:
+    needs: [get_runners_details, build-package, deploy-dev]
+    uses: telus-health/th-enablement-actions/.github/workflows/deploy-to-ocp-cd.yaml@master
+    with:
+      runner_name: ${{ needs.get_runners_details.outputs.runner_qa }}
+      IMAGE_TAG: ${{ needs.build-package.outputs.IMAGE_TAG }}
+      maint_windows_check: false
+      environment_value: qa
+      env_vars_file: platformeurekaserver
+    secrets: inherit
+
+  deploy-staging:
+    needs: [get_runners_details, build-package, deploy-dev, deploy-qa]
+    uses: telus-health/th-enablement-actions/.github/workflows/deploy-to-ocp-cd.yaml@master
+    with:
+      runner_name: ${{ needs.get_runners_details.outputs.runner_stage }}
+      IMAGE_TAG: ${{ needs.build-package.outputs.IMAGE_TAG }}
+      maint_windows_check: false
+      environment_value: staging
+      env_vars_file: platformeurekaserver
+    secrets: inherit
+
+  deploy-prod:
+    needs: [get_runners_details, build-package, deploy-staging]
+    uses: telus-health/th-enablement-actions/.github/workflows/deploy-to-ocp-cd.yaml@master
+    with:
+      runner_name: ${{ needs.get_runners_details.outputs.runner_prod }}
+      IMAGE_TAG: ${{ needs.build-package.outputs.IMAGE_TAG }}
+      maint_windows_check: true
+      environment_value: prod
+      env_vars_file: platformeurekaserver
+    secrets: inherit
+
+  deploy-dr:
+    needs: [get_runners_details, build-package, deploy-prod]
+    uses: telus-health/th-enablement-actions/.github/workflows/deploy-to-ocp-cd.yaml@master
+    with:
+      runner_name: ${{ needs.get_runners_details.outputs.runner_dr }}
+      IMAGE_TAG: ${{ needs.build-package.outputs.IMAGE_TAG }}
+      maint_windows_check: true
+      environment_value: dr
+      env_vars_file: platformeurekaserver
+    secrets: inherit
+

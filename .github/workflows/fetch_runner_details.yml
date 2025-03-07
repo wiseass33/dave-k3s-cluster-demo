@@ -1,0 +1,18 @@
+name: Fetch available Runners
+on:
+  workflow_call:
+    outputs:
+      runner_dev:
+        value: ${{ jobs.fetch_runner_details.outputs.output1 }}
+jobs:
+  fetch_runner_details:
+    name: Fetching the runners details
+    runs-on: ubuntu-latest
+    outputs:
+      output1: ${{ steps.fetch.outputs.runner_dev }}
+    steps:    
+    - id: fetch
+      name: Fetching the runners details
+      run: |
+          echo "runner_dev=ubuntu-latest" >> $GITHUB_OUTPUT
+      shell: bash
