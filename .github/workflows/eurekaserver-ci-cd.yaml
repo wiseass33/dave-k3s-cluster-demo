@@ -8,3 +8,15 @@ jobs:
     name: Fetch Runner Details
     uses: wiseass33/dave-k3s-cluster-demo/.github/workflows/fetch_runner_details.yaml@development
     secrets: inherit
+
+  build-package:
+    needs: [get_runners_details]
+    uses: wiseass33/dave-k3s-cluster-demo/.github/workflows/maven-build-package-ci.yaml@development
+    with:
+      runner_name: ${{ needs.get_runners_details.outputs.runner_dev }}
+      needs_docker_push: true
+      needs_maven_build: true
+      env_vars_file: platformeurekaserver
+      maven_phases: clean package
+      maven_properties: -DskipTests=true
+    secrets: inherit  
