@@ -75,7 +75,12 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-
+    <distributionManagement>
+      <repository>
+        <id>github</id>
+        <url>https://maven.pkg.github.com/wiseass33/dave-k3s-cluster-demo</url>
+      </repository>
+    </distributionManagement>
 	<build>
 		<plugins>
 			<plugin>
