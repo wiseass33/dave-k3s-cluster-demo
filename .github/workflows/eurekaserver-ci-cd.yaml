@@ -16,7 +16,7 @@ jobs:
       runner_name: ${{ needs.get_runners_details.outputs.runner_dev }}
       needs_docker_push: true
       needs_maven_build: true
-      env_vars_file: platformeurekaserver
+      env_vars_file: eurekaserver
       maven_phases: clean package
       maven_properties: -DskipTests=true
     secrets: inherit  
