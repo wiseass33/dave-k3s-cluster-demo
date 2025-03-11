@@ -19,4 +19,14 @@ jobs:
       env_vars_file: eurekaserver
       maven_phases: clean package
       maven_properties: -DskipTests=true
-    secrets: inherit  
+    secrets: inherit
+  deploy-dev:
+    needs: [get_runners_details, build-package]
+    uses: wiseass33/dave-k3s-cluster-demo/.github/workflows/deploy-to-ocp-cd.yaml@development
+    with:
+      runner_name: ${{ needs.get_runners_details.outputs.runner_dev }}
+      IMAGE_TAG: ${{ needs.build-package.outputs.IMAGE_TAG }}
+      environment_value: dev
+      env_vars_file: eurekaserver
+    secrets: inherit
+
