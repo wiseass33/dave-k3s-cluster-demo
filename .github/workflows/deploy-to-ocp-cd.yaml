@@ -57,6 +57,10 @@ jobs:
           kubectl config set-credentials github-actions --token=${{ secrets.K3S_API_TOKEN }}
           kubectl config set-context k3s --cluster=k3s-cluster --user=github-actions
           kubectl config use-context k3s
+    - name: Test K3s Connection
+      run: |
+          kubectl get nodes
+          kubectl auth can-i '*' '*' --all-namespaces
     - name: K3s App Deployment
       run: |
         helm version	
