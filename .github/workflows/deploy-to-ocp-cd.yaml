@@ -43,13 +43,21 @@ jobs:
           echo values_file=dev-values.yaml >> $GITHUB_ENV
           echo OCP_SERVER=https://kubernetes.default.svc  >> $GITHUB_ENV
           echo SA_TOKEN=${{ secrets.DEV_SA_TOKEN }} >> $GITHUB_ENV
+    - name: Debug API Token
+      run: |
+        if [ -z "${{ secrets.K3S_API_TOKEN }}" ]; then
+          echo "K3S_API_TOKEN is empty!"
+          exit 1
+        else
+          echo "K3S_API_TOKEN is set (masked output)"
+        fi
     - name: Authenticate with K3s
       run: |
           kubectl config set-cluster k3s-cluster --server=https://${{ secrets.K3S_SERVER_IP }}:6443 --insecure-skip-tls-verify=true
           kubectl config set-credentials github-actions --token=${{ secrets.K3S_API_TOKEN }}
           kubectl config set-context k3s --cluster=k3s-cluster --user=github-actions
           kubectl config use-context k3s
-    - name: OCP App Deployment
+    - name: K3s App Deployment
       run: |
         helm version	
         helm upgrade --install ${{ env.APPLICATION_NAME }} \
