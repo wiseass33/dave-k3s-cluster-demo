@@ -42,7 +42,7 @@ jobs:
           echo NAMESPACE=${{ env.OPENSHIFT_PROJECT_NAME_DEV }} >> $GITHUB_ENV
           echo values_file=dev-values.yaml >> $GITHUB_ENV
           echo OCP_SERVER=https://kubernetes.default.svc  >> $GITHUB_ENV
-          echo SA_TOKEN=${{ secrets.DEV_SA_TOKEN }} >> $GITHUB_ENV
+          echo SA_TOKEN=${{ secrets.K3S_API_TOKEN }} >> $GITHUB_ENV
     - name: Debug API Token
       run: |
         if [ -z "${{ secrets.K3S_API_TOKEN }}" ]; then
