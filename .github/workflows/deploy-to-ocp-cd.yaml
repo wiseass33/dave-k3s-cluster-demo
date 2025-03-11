@@ -9,9 +9,6 @@ on:
       IMAGE_TAG:
         required: true
         type: string
-      maint_windows_check:
-        required: true
-        type: boolean
       environment_value:
         required: true
         type: string
