@@ -16,7 +16,9 @@ image:
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
   
-imagePullSecrets: []
+imagePullSecrets:
+  - name: ghcr-secret
+  
 nameSpace: dave-demo-services
 ocpDomain: apps.dvocp.ocp.thops.cloud
 

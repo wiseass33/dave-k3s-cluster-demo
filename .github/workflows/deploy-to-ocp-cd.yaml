@@ -69,6 +69,7 @@ jobs:
         --set nameSpace=$NAMESPACE \
         --namespace $NAMESPACE \
         --history-max 3 \
+        --set imagePullSecrets[0].name=ghcr-secret \
         --set app.version=1 \
         --set app.name=${{ env.APPLICATION_NAME }} \
         --set image.tag=${{ inputs.IMAGE_TAG }}
