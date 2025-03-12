@@ -41,7 +41,6 @@ jobs:
       run: |
           echo NAMESPACE=${{ env.OPENSHIFT_PROJECT_NAME_DEV }} >> $GITHUB_ENV
           echo values_file=dev-values.yaml >> $GITHUB_ENV
-          echo OCP_SERVER=https://kubernetes.default.svc  >> $GITHUB_ENV
           echo SA_TOKEN=${{ secrets.K3S_API_TOKEN }} >> $GITHUB_ENV
     - name: Debug API Token
       run: |
@@ -67,7 +66,8 @@ jobs:
         helm upgrade --install ${{ env.APPLICATION_NAME }} \
         -f ${{ env.PROJECT_FOLDER_NAME }}/helm/${{ env.APPLICATION_NAME }}/env-values/${{ env.values_file }} \
         ./${{ env.PROJECT_FOLDER_NAME }}/helm/${{ env.APPLICATION_NAME }} \
-        --set nameSpace=${{ env.NAMESPACE }} \
+        --set nameSpace=$NAMESPACE \
+        --namespace $NAMESPACE \
         --history-max 3 \
         --set app.version=1 \
         --set app.name=${{ env.APPLICATION_NAME }} \
