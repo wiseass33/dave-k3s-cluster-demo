@@ -44,11 +44,15 @@ service:
   type: ClusterIP
   port: 8761
 
+serviceAccount:
+  create: false  # We're not creating a new SA
+  name: "github-actions-sa"  # Use an existing ServiceAccount
+  
 pv_log:
-  name: loggingpv-dave-demo-services
+  name: dave-demo-serv-log-pv
   storage: 1Gi
-  pvcname: dave-demo-pvc
-  storageclassname: ""
+  pvcname: dave-demo-serv-log-pvc
+  storageclassname: manual-storage
 
 mountpath:
   log: /applogs

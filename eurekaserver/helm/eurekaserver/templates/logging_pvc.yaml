@@ -1,0 +1,17 @@
+{{- if not (lookup "v1" "PersistentVolumeClaim" $.Values.nameSpace $.Values.pv_log.pvcname) }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  annotations:
+    "helm.sh/resource-policy": keep
+  name: {{ .Values.pv_log.pvcname }}
+  namespace: {{ .Values.nameSpace }}
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: {{ .Values.pv_log.storage }}
+  storageClassName: {{ .Values.pv_log.storageclassname }} # Must match PV's storageClassName
+  volumeName: {{ .Values.pv_log.name }} # Must match the name of the PV
+{{end}}
