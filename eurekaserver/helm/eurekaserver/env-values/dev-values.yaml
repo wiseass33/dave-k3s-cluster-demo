@@ -71,9 +71,9 @@ volumes:
 
 volumeMounts:
   - name: log
-    mountPath: mountpath.log
+    mountPath: /applogs
   - name: logconfig
-    mountPath: mountpath.logconfig
+    mountPath: /app/config
 
 ## Resource Variables for the deployment
 resources:
