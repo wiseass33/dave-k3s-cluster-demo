@@ -4,6 +4,7 @@
 <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
     <!-- Listeners -->
     <statusListener class="ch.qos.logback.core.status.OnConsoleStatusListener" />
+    <statusListener class="ch.qos.logback.core.status.NopStatusListener"/>
 
     <jmxConfigurator />
 
@@ -58,12 +59,11 @@
 		<rollingPolicy
 			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 			<!-- Roll-over daily -->
-			<fileNamePattern>"${LOG_FILE_ROOTPATH}/archived/${LOG_FILE_NAME}.${LOG_FILE_ROLLING_PATTERN}.${LOG_FILE_EXT}"</fileNamePattern>
+			<fileNamePattern>${LOG_FILE_ROOTPATH}/archived/${LOG_FILE_NAME}.${LOG_FILE_ROLLING_PATTERN}.${LOG_FILE_EXT}.gz</fileNamePattern>
 		</rollingPolicy>
 	</appender>
 
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-
         <!-- Filters out logs/events to reject the ones with a marker set to one of the following: -->
         <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
             <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
@@ -78,8 +78,7 @@
             </evaluator>
             <onMatch>DENY</onMatch>
             <onMismatch>ACCEPT</onMismatch>
-            
-                    </filter>
+        </filter>
 
         <!-- One of the String values System.out or System.err. The default target is System.out. -->
         <target>system.out</target>
@@ -96,14 +95,10 @@
     </appender>
 
     <!-- Turbo filters are global filters that are evaluated before the logger level. -->
-
     <!-- By default, 'fatal' marker is always accepted, no matter the level or the logger! -->
-
-
 
     <!-- Logger levels to determine which log levels to filter out or in. -->
     <!-- Possible levels: TRACE, DEBUG, INFO, WARN, ERROR, ALL or OFF. Also: INHERITED or NULL -->
-
 	<logger name="com.wisemangroup" level="info"
 		additivity="false">
 		<appender-ref ref="FILE-AUDIT" />
@@ -114,10 +109,34 @@
  		<appender-ref ref="FILE-AUDIT"/>
 	</logger>
 
-	<root level="error">
+	<root level="info">
 		<appender-ref ref="FILE-AUDIT" />
 		<appender-ref ref="STDOUT" />
 	</root>
+	
+    <logger name="context.properties" level="info">
+       <appender-ref ref="STDOUT"/>
+    </logger>
+
+    <statusListener class="ch.qos.logback.core.status.OnConsoleStatusListener">
+      <param name="LOG_FILE_ROOTPATH context property" value="${LOG_FILE_ROOTPATH}" />
+      <param name="LOG_FILE_NAME context property" value="${LOG_FILE_NAME}" />
+      <param name="LOG_FILE_EXT context property" value="${LOG_FILE_EXT}" />
+      <param name="LOG_FILE_FULLPATH context property" value="${LOG_FILE_FULLPATH}" />
+      <param name="LOG_FILE_ROLLING_PATTERN context property" value="${LOG_FILE_ROLLING_PATTERN}" />
+      <param name="LOG_FILENAME_PATTERN context property" value="${LOG_FILENAME_PATTERN}" />
+      <param name="LOG_FILE_ROLLING_MAX_DAY_HISTORY context property" value="${LOG_FILE_ROLLING_MAX_DAY_HISTORY}" />
+      <param name="LOG_FILE_ROLLING_SIZE_LIMIT context property" value="${LOG_FILE_ROLLING_SIZE_LIMIT}" />
+      <param name="OUTPUT_PATTERN context property" value="${OUTPUT_PATTERN}" />
+      <param name="OUTPUT_LOG_PATTERN context property" value="${OUTPUT_LOG_PATTERN}" />
+      <param name="OUTPUT_PATTERN_COLOR context property" value="${OUTPUT_PATTERN_COLOR}" />
+      <param name="APPLICATION_INSTANCE_NAME context property" value="${APPLICATION_INSTANCE_NAME}" />
+      <param name="HOSTNAME" value="${HOSTNAME}" />
+      <param name="CONTEXT_NAME" value="${CONTEXT_NAME}" />
+      <param name="PID" value="${PID}" />
+      <param name="LOG_LEVEL_PATTERN" value="${LOG_LEVEL_PATTERN}" />
+      <param name="LOG_EXCEPTION_CONVERSION_WORD" value="${LOG_EXCEPTION_CONVERSION_WORD}" />
+    </statusListener>
 
     <!-- Include a logback extension config file to override loggers define above or add new ones. -->
     <!-- <include optional="true" file="config/logback-extension-logger.xml"/>-->
