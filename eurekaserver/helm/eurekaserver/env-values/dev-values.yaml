@@ -66,7 +66,7 @@ volumes:
         claimName: dave-demo-serv-log-pvc
     - name: logconfig
       configMap:
-        name: dave-demo-serv-log-config
+        name: dave-demo-serv-logconfig
         defaultMode: 420
 
 volumeMounts:

@@ -3,7 +3,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: dave-demo-logconfig
+  name: dave-demo-serv-logconfig
   namespace: {{ $namespace }}
 data:
   logback.xml: |
