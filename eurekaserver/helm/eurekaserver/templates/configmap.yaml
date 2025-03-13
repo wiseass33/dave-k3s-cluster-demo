@@ -1,0 +1,10 @@
+{{ $appname := .Chart.Name }}
+{{ $namespace := $.Values.nameSpace }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dave-demo-logconfig
+  namespace: {{ $namespace }}
+data:
+  logback.xml: |
+{{ .Files.Get "configs/logback.xml" | indent 4 }}

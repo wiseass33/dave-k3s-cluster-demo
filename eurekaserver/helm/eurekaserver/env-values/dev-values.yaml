@@ -59,7 +59,22 @@ pv_log:
 mountpath:
   log: /applogs
   logconfig: /app/config
-  
+
+volumes:
+    - name: log
+      persistentVolumeClaim:
+        claimName: dave-demo-serv-log-pvc
+    - name: logconfig
+      configMap:
+        name: dave-demo-serv-log-config
+        defaultMode: 420
+
+volumeMounts:
+  - name: log
+    mountPath: mountpath.log
+  - name: logconfig
+    mountPath: mountpath.logconfig
+
 ## Resource Variables for the deployment
 resources:
   limits:
