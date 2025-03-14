@@ -1,10 +1,10 @@
-{{ $appname := .Chart.Name }}
-{{ $namespace := $.Values.nameSpace }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: dave-demo-serv-logconfig
-  namespace: {{ $namespace }}
+  namespace: dave-demo-services
 data:
-  logback-spring.xml: |
-{{ (.Files.Glob "configs/logback-spring.xml").AsConfig | indent 2 }}
+{{- range $path, $fileContents := .Files.Glob "configs/logback-spring.xml" }}
+    logback-spring.xml: |
+      {{- $fileContents | nindent 4 }}
+{{- end }}
