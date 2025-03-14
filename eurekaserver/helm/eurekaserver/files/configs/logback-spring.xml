@@ -41,7 +41,7 @@
 			<!-- Comment ot 14Mar2025 
 			<fileNamePattern>${USER_HOME}/archived/eurekaserver.%d{yyyy-MM-dd}.log</fileNamePattern>
 			-->
-			<fileNamePattern>${LOG_FILE_ROOTPATH}/archived/${LOG_FILE_NAME}.${LOG_FILE_ROLLING_PATTERN}.${LOG_FILE_EXT}.gz</fileNamePattern>
+			<fileNamePattern>${LOG_FILE_ROOTPATH}/archive/${LOG_FILE_NAME}.${LOG_FILE_ROLLING_PATTERN}.${LOG_FILE_EXT}.gz</fileNamePattern>
 			<!--
 			<maxHistory>90</maxHistory>
 			<totalSizeCap>10MB</totalSizeCap>

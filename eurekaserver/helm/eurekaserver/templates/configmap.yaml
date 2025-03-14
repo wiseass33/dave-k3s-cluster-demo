@@ -6,5 +6,5 @@ metadata:
   name: dave-demo-serv-logconfig
   namespace: {{ $namespace }}
 data:
-  logback.xml: |
+  logback-spring.xml: |
 {{ .Files.Get "configs/logback-spring.xml" | indent 4 }}
