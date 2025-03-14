@@ -7,4 +7,4 @@ metadata:
   namespace: {{ $namespace }}
 data:
   logback-spring.xml: |
-{{ .Files.Get "configs/logback-spring.xml" | indent 4 }}
+{{ (.Files.Glob "configs/logback-spring.xml").AsConfig | indent 2 }}
