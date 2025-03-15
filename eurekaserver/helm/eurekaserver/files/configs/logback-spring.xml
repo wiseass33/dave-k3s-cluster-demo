@@ -49,7 +49,7 @@
 		</rollingPolicy>
 	</appender>
 
-	<logger name="com.wisemangroup.eurekaserver" level="debug"
+	<logger name="com.wisemangroup" level="debug"
 		additivity="false">
 			<appender-ref ref="STDOUT" />
 			<appender-ref ref="FILE-AUDIT" />

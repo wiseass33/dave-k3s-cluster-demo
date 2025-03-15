@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+<include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+<springProperty scope="context" name="eurekaserver" source="spring.application.name"/>
+  <!-- Commented out 14Mar2025; no longer needed.
+  <property name="USER_HOME" value="/app" />
+  -->
+  <statusListener class="ch.qos.logback.core.status.OnConsoleStatusListener" />
+  <statusListener class="ch.qos.logback.core.status.NopStatusListener"/>
+
+  <contextName>${HOSTNAME}</contextName>
+
+  <!-- Loading properties defined for the module's configuration. Can be used below, or can also be overwritten below. -->
+  <property scope="context" name="APPLICATION_INSTANCE_NAME" value="${application.instance.name:-${CONTEXT_NAME}}.${HOSTNAME}"/>
+
+  <!-- Copied from log.back.xml 14Mar2025 -->
+  <property scope="context" name="LOG_FILE_ROOTPATH" value="/applogs"/>
+  <property scope="context" name="LOG_FILE_NAME"     value="${CONTEXT_NAME}"/>
+  <property scope="context" name="LOG_FILE_EXT"      value="log"/>
+  <property scope="context" name="LOG_FILE_FULLPATH" value="${LOG_FILE_ROOTPATH}/${LOG_FILE_NAME}.${LOG_FILE_EXT}"/>
+  <property scope="context" name="LOG_FILE_ROLLING_PATTERN" value="%d{yyyy-MM-dd}"/>
+  <property scope="context" name="OUTPUT_LOG_PATTERN"
+    value="%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}" />
+
+  <!-- Console appenders -->
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+	  <pattern>${OUTPUT_LOG_PATTERN}</pattern>
+	</encoder>
+  </appender>
+
+  <!-- File appenders -->
+  <appender name="FILE-AUDIT" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <!-- Commented out 14Mar2025; replaced with the line below
+	<file>${USER_HOME}/eurekaserver.log</file>
+	-->
+	<file>${LOG_FILE_FULLPATH}</file>
+    <encoder>
+      <pattern>${OUTPUT_LOG_PATTERN}</pattern>
+    </encoder>
+
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <!-- Roll-over daily -->
+      <!-- Comment ot 14Mar2025 
+      <fileNamePattern>${USER_HOME}/archived/eurekaserver.%d{yyyy-MM-dd}.log</fileNamePattern>
+      -->
+      <fileNamePattern>${LOG_FILE_ROOTPATH}/archive/${LOG_FILE_NAME}.${LOG_FILE_ROLLING_PATTERN}.${LOG_FILE_EXT}.gz</fileNamePattern>
+      <!--
+      <maxHistory>90</maxHistory>
+      <totalSizeCap>10MB</totalSizeCap>
+      -->
+    </rollingPolicy>
+  </appender>
+
+  <!-- Log properties at startup -->
+  <appender name="STARTUP_LOG" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <!--
+      <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [STARTUP] - LOG_FILE_ROOTPATH: ${LOG_FILE_ROOTPATH}, LOG_FILE_NAME: ${LOG_FILE_NAME}, LOG_FILE_EXT: ${LOG_FILE_EXT}, LOG_FILE_FULLPATH: ${LOG_FILE_FULLPATH}, APPLICATION_INSTANCE_NAME: ${APPLICATION_INSTANCE_NAME}, HOSTNAME: ${HOSTNAME}, CONTEXT_NAME: ${CONTEXT_NAME}%n</pattern>
+      -->
+      <pattern>${OUTPUT_LOG_PATTERN} [STARTUP] - LOG_FILE_ROOTPATH: ${LOG_FILE_ROOTPATH}, LOG_FILE_NAME: ${LOG_FILE_NAME}, LOG_FILE_EXT: ${LOG_FILE_EXT}, LOG_FILE_FULLPATH: ${LOG_FILE_FULLPATH}, APPLICATION_INSTANCE_NAME: ${APPLICATION_INSTANCE_NAME}, HOSTNAME: ${HOSTNAME}, CONTEXT_NAME: ${CONTEXT_NAME}%n</pattern>
+    </encoder>
+  </appender>
+
+  <logger name="com.wisemangroup.eurekaserver" level="debug" additivity="false">
+    <appender-ref ref="STDOUT" />
+    <appender-ref ref="FILE-AUDIT" />
+  </logger>
+
+  <logger name="org.springframework.web.filter.CommonsRequestLoggingFilter">
+    <appender-ref ref="STDOUT"/>
+  </logger>
+
+  <!-- Associate the "startup" logger with the "STARTUP_LOG" appender -->
+  <logger name="startup" level="INFO" additivity="false">
+    <appender-ref ref="STARTUP_LOG"/>
+  </logger>
+
+  <root level="info">
+    <appender-ref ref="STDOUT" />
+    <appender-ref ref="FILE-AUDIT" />
+  </root>
+	<!--
+    <statusListener class="ch.qos.logback.core.status.OnConsoleStatusListener">
+      <param name="LOG_FILE_ROOTPATH context property" value="${LOG_FILE_ROOTPATH}" />
+      <param name="LOG_FILE_NAME context property" value="${LOG_FILE_NAME}" />
+      <param name="LOG_FILE_EXT context property" value="${LOG_FILE_EXT}" />
+      <param name="LOG_FILE_FULLPATH context property" value="${LOG_FILE_FULLPATH}" />
+      <param name="LOG_FILE_ROLLING_PATTERN context property" value="${LOG_FILE_ROLLING_PATTERN}" />
+      <param name="OUTPUT_LOG_PATTERN context property" value="${OUTPUT_LOG_PATTERN}" />
+      <param name="APPLICATION_INSTANCE_NAME context property" value="${APPLICATION_INSTANCE_NAME}" />
+      <param name="HOSTNAME" value="${HOSTNAME}" />
+      <param name="CONTEXT_NAME" value="${CONTEXT_NAME}" />
+      <param name="PID" value="${PID}" />
+      <param name="LOG_LEVEL_PATTERN" value="${LOG_LEVEL_PATTERN}" />
+      <param name="LOG_EXCEPTION_CONVERSION_WORD" value="${LOG_EXCEPTION_CONVERSION_WORD}" />
+    </statusListener>
+    -->
+</configuration>
