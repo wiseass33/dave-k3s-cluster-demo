@@ -3,7 +3,10 @@
 FROM eclipse-temurin:17-jre-alpine
 
 # Setting up JAVA Home with Open JDK JRE Path
-ENV JAVA_HOME /usr/lib/jvm/jre-openjdk
+# ENV JAVA_HOME /usr/lib/jvm/jre-openjdk
+# Setting up JAVA_HOME correctly
+ENV JAVA_HOME /opt/java/openjdk
+ENV PATH="${JAVA_HOME}/bin:${PATH}"
 
 # Directory for application
 RUN mkdir -p /app
