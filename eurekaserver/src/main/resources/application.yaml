@@ -18,3 +18,5 @@ eureka:
   server:
     waitTimeInMsWhenSyncEmpty: 0
     enableSelfPreservation: false  # note the correct property name
+logging:
+    config: /app/config/logback-spring.xml
