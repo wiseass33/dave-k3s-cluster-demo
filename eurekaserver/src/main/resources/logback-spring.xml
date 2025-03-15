@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
+<!-- This is the logback (or logback-spring) file that I used to populate the
+     K3s configmap. The STARTUP appender and startup logger where added later.
+     The main classes may or may not reference the startup logger, i.e., to
+     output logback properties established here.  This file may end up being
+     used for local testing.
+
+-->
 <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
 <springProperty scope="context" name="eurekaserver" source="spring.application.name"/>
   <!-- Commented out 14Mar2025; no longer needed.
@@ -72,28 +79,12 @@
   </logger>
 
   <!-- Associate the "startup" logger with the "STARTUP_LOG" appender -->
-  <logger name="startup" level="INFO" additivity="false">
+  <logger name="startup" level="info" additivity="false">
     <appender-ref ref="STARTUP_LOG"/>
   </logger>
 
-  <root level="info">
+  <root level="debug">
     <appender-ref ref="STDOUT" />
     <appender-ref ref="FILE-AUDIT" />
   </root>
-	<!--
-    <statusListener class="ch.qos.logback.core.status.OnConsoleStatusListener">
-      <param name="LOG_FILE_ROOTPATH context property" value="${LOG_FILE_ROOTPATH}" />
-      <param name="LOG_FILE_NAME context property" value="${LOG_FILE_NAME}" />
-      <param name="LOG_FILE_EXT context property" value="${LOG_FILE_EXT}" />
-      <param name="LOG_FILE_FULLPATH context property" value="${LOG_FILE_FULLPATH}" />
-      <param name="LOG_FILE_ROLLING_PATTERN context property" value="${LOG_FILE_ROLLING_PATTERN}" />
-      <param name="OUTPUT_LOG_PATTERN context property" value="${OUTPUT_LOG_PATTERN}" />
-      <param name="APPLICATION_INSTANCE_NAME context property" value="${APPLICATION_INSTANCE_NAME}" />
-      <param name="HOSTNAME" value="${HOSTNAME}" />
-      <param name="CONTEXT_NAME" value="${CONTEXT_NAME}" />
-      <param name="PID" value="${PID}" />
-      <param name="LOG_LEVEL_PATTERN" value="${LOG_LEVEL_PATTERN}" />
-      <param name="LOG_EXCEPTION_CONVERSION_WORD" value="${LOG_EXCEPTION_CONVERSION_WORD}" />
-    </statusListener>
-    -->
 </configuration>

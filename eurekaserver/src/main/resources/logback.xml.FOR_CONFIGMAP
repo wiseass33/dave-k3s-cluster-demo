@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
+<!-- This logback.xml file content is used in the ConfigMap that's added to the
+     kubernetes (k3s) namespace.  Outside of local testing purpose this file is
+     not meant to be a permanent feature in the "resources" folder.  If you
+     wish to test this file always rename it to logback.xml.FOR_CONFIGMAP upon
+     completion.
+-->
 <configuration scan="true" scanPeriod="30 seconds" >
 <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
     <!-- Listeners -->

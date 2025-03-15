@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
+<!-- This is the logback file from remote control service eurekaserver.  I have
+     altered the file to include the STARTYUP appender and startup logger. 
+     This logger is used in EurekaserverApplication (main class) to output 
+     logback properties to the console.  Note: this file is used for local
+     testing but has been deprecated by logback-spring.xml; hence, the reason
+     why it is named logback.xml.FROM-REMOTE-CONTROL-resources.
+-->
 <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
 <springProperty scope="context" name="eurekaserver" source="spring.application.name"/>
 	<property name="USER_HOME" value="/app" />	
