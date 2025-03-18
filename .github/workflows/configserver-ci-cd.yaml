@@ -1,0 +1,32 @@
+name: Config Server CICD Workflow .
+run-name: configserver Pipeline
+on:
+  workflow_dispatch:  
+
+jobs:
+  get_runners_details:
+    name: Fetch Runner Details
+    uses: wiseass33/dave-k3s-cluster-demo/.github/workflows/fetch_runner_details.yaml@development
+    secrets: inherit
+
+  build-package:
+    needs: [get_runners_details]
+    uses: wiseass33/dave-k3s-cluster-demo/.github/workflows/maven-build-package-ci.yaml@development
+    with:
+      runner_name: ${{ needs.get_runners_details.outputs.runner_dev }}
+      needs_docker_push: true
+      needs_maven_build: true
+      env_vars_file: configserver
+      maven_phases: clean package
+      maven_properties: -DskipTests=true
+    secrets: inherit
+  deploy-dev:
+    needs: [get_runners_details, build-package]
+    uses: wiseass33/dave-k3s-cluster-demo/.github/workflows/deploy-to-ocp-cd.yaml@development
+    with:
+      runner_name: ${{ needs.get_runners_details.outputs.runner_dev }}
+      IMAGE_TAG: ${{ needs.build-package.outputs.IMAGE_TAG }}
+      environment_value: dev
+      env_vars_file: configserver
+    secrets: inherit
+
