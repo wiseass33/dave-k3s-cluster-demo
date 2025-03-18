@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<configuration scan="true" scanPeriod="30 seconds" >
+<include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <!-- Listeners -->
+    <statusListener class="ch.qos.logback.core.status.OnConsoleStatusListener" />
+    <statusListener class="ch.qos.logback.core.status.NopStatusListener"/>
+
+    <jmxConfigurator />
+
+    <contextName>${HOSTNAME}</contextName>
+
+    <!-- Loading properties defined for the module's configuration. Can be used below, or can also be overwritten below. -->
+    <property scope="context" name="APPLICATION_INSTANCE_NAME" value="${application.instance.name:-${CONTEXT_NAME}}.${HOSTNAME}"/>
+
+    <!-- Properties to configure the log filenames and other file appender attributes. -->
+    <property scope="context" name="LOG_FILE_ROOTPATH" value="/applogs"/>
+    <property scope="context" name="LOG_FILE_NAME"     value="${CONTEXT_NAME}"/>
+    <property scope="context" name="LOG_FILE_EXT"      value="log"/>
+    <property scope="context" name="LOG_FILE_FULLPATH" value="${LOG_FILE_ROOTPATH}/${LOG_FILE_NAME}.${LOG_FILE_EXT}"/>
+    <property scope="context" name="LOG_FILE_ROLLING_PATTERN" value="%d{yyyy-MM-dd}"/>
+    <property scope="context" name="LOG_FILENAME_PATTERN" value="${LOG_FILE_ROOTPATH}/${LOG_FILE_NAME}-${LOG_FILE_ROLLING_PATTERN}.gz"/>
+
+    <property scope="context" name="LOG_FILE_ROLLING_MAX_DAY_HISTORY" value="3"/>
+    <property scope="context" name="LOG_FILE_ROLLING_SIZE_LIMIT" value="100MB"/>
+
+
+    <!-- Change the pattern below to have a different format. -->
+    <!-- Default text output layout. -->
+
+    <property scope="context"
+              name="OUTPUT_PATTERN"
+			  value="%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}" />
+ 	<!-- old Log pattern-->
+	<property scope="context"
+			  name="OUTPUT_LOG_PATTERN"
+			  value="%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}" />
+             
+    <property scope="context"
+              name="OUTPUT_PATTERN_COLOR"
+              value="%boldCyan(%d{yyyy-MM-dd HH:mm:ss.SSS Z,utc}) %highlight(%-5.5level %-7.7marker [%30.30thread]) %green([%-54.54(%logger{50}:%.4L)]) %n"/>
+              
+    <!-- Include a logback extension config file to override properties define above before configuring appenders. -->
+  
+    <appender name="STDOUT"
+		class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>${OUTPUT_PATTERN}</pattern>
+		</encoder>
+	</appender>
+	
+	<appender name="FILE-AUDIT"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_FILE_FULLPATH}</file>
+		<encoder>
+			<pattern>${OUTPUT_LOG_PATTERN}</pattern>
+		</encoder>
+
+		<rollingPolicy
+			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- Roll-over daily -->
+			<fileNamePattern>${LOG_FILE_ROOTPATH}/archived/${LOG_FILE_NAME}.${LOG_FILE_ROLLING_PATTERN}.${LOG_FILE_EXT}.gz</fileNamePattern>
+		</rollingPolicy>
+	</appender>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- Filters out logs/events to reject the ones with a marker set to one of the following: -->
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
+                <!--<marker>VERBOSE</marker>-->
+                <!--<marker>FATAL</marker>-->
+                <!--<marker>NOTE</marker>-->
+                <!--<marker>DIAG</marker>-->
+                <!--<marker>DIAGNOS</marker>-->
+                <!--<marker>METRICS</marker>-->
+                <!--<marker>INCONS</marker>-->
+                <marker>CONSOLE</marker>
+            </evaluator>
+            <onMatch>DENY</onMatch>
+            <onMismatch>ACCEPT</onMismatch>
+        </filter>
+
+        <!-- One of the String values System.out or System.err. The default target is System.out. -->
+        <target>system.out</target>
+
+        <!-- Encoders are assigned by default the type ch.qos.logback.classic.encoder.PatternLayoutEncoder -->
+        <!-- Multiple encoders are accepted. -->
+        <encoder>
+            <!-- Pattern in log4j: "%d{dd MMM yyyy HH\:mm\:ss } [%t] %-5p %c %x - %m%n" -->
+            <pattern>${OUTPUT_PATTERN_COLOR}</pattern>
+
+            <!-- immediateFlush decreases performance if set to true but insure no log entries are lost when application crashes or stops.  -->
+            <immediateFlush>true</immediateFlush>
+        </encoder>
+    </appender>
+
+    <!-- Turbo filters are global filters that are evaluated before the logger level. -->
+    <!-- By default, 'fatal' marker is always accepted, no matter the level or the logger! -->
+
+    <!-- Logger levels to determine which log levels to filter out or in. -->
+    <!-- Possible levels: TRACE, DEBUG, INFO, WARN, ERROR, ALL or OFF. Also: INHERITED or NULL -->
+	<logger name="com.wisemangroup" level="info"
+		additivity="false">
+		<appender-ref ref="FILE-AUDIT" />
+			<appender-ref ref="STDOUT" />
+	</logger>
+
+	<logger name="org.springframework.web.filter.CommonsRequestLoggingFilter">
+ 		<appender-ref ref="FILE-AUDIT"/>
+	</logger>
+
+	<root level="info">
+		<appender-ref ref="FILE-AUDIT" />
+		<appender-ref ref="STDOUT" />
+	</root>
+	
+    <logger name="context.properties" level="info">
+       <appender-ref ref="STDOUT"/>
+    </logger>
+
+    <statusListener class="ch.qos.logback.core.status.OnConsoleStatusListener">
+      <param name="LOG_FILE_ROOTPATH context property" value="${LOG_FILE_ROOTPATH}" />
+      <param name="LOG_FILE_NAME context property" value="${LOG_FILE_NAME}" />
+      <param name="LOG_FILE_EXT context property" value="${LOG_FILE_EXT}" />
+      <param name="LOG_FILE_FULLPATH context property" value="${LOG_FILE_FULLPATH}" />
+      <param name="LOG_FILE_ROLLING_PATTERN context property" value="${LOG_FILE_ROLLING_PATTERN}" />
+      <param name="LOG_FILENAME_PATTERN context property" value="${LOG_FILENAME_PATTERN}" />
+      <param name="LOG_FILE_ROLLING_MAX_DAY_HISTORY context property" value="${LOG_FILE_ROLLING_MAX_DAY_HISTORY}" />
+      <param name="LOG_FILE_ROLLING_SIZE_LIMIT context property" value="${LOG_FILE_ROLLING_SIZE_LIMIT}" />
+      <param name="OUTPUT_PATTERN context property" value="${OUTPUT_PATTERN}" />
+      <param name="OUTPUT_LOG_PATTERN context property" value="${OUTPUT_LOG_PATTERN}" />
+      <param name="OUTPUT_PATTERN_COLOR context property" value="${OUTPUT_PATTERN_COLOR}" />
+      <param name="APPLICATION_INSTANCE_NAME context property" value="${APPLICATION_INSTANCE_NAME}" />
+      <param name="HOSTNAME" value="${HOSTNAME}" />
+      <param name="CONTEXT_NAME" value="${CONTEXT_NAME}" />
+      <param name="PID" value="${PID}" />
+      <param name="LOG_LEVEL_PATTERN" value="${LOG_LEVEL_PATTERN}" />
+      <param name="LOG_EXCEPTION_CONVERSION_WORD" value="${LOG_EXCEPTION_CONVERSION_WORD}" />
+    </statusListener>
+
+    <!-- Include a logback extension config file to override loggers define above or add new ones. -->
+    <!-- <include optional="true" file="config/logback-extension-logger.xml"/>-->
+
+</configuration>

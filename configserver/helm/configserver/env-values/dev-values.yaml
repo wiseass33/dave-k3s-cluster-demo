@@ -1,0 +1,99 @@
+# Dev values for configserver.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+## To Override App name and Version used for canary deployments
+app:
+  name: null
+  version: null
+  
+## Common Variables
+replicaCount: 1
+
+image:
+  repository: ghcr.io/wiseass33/image/configserver
+  pullPolicy: Always
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+  
+imagePullSecrets:
+  - name: ghcr-secret
+  
+nameSpace: dave-demo-services
+ocpDomain: apps.dvocp.ocp.thops.cloud
+
+## Override the deployment and release name in the templates
+nameOverride: ""
+fullnameOverride: ""
+
+podAnnotations:
+  sidecar.istio.io/inject: "true"
+
+## Security Context Variables
+podSecurityContext:
+  supplementalGroups: 
+    - 65534
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+## Service Variables for the Deployment and Service Template
+service:
+  type: ClusterIP
+  port: 8761
+
+serviceAccount:
+  create: false  # We're not creating a new SA
+  name: "github-actions-sa"  # Use an existing ServiceAccount
+  
+pv_log:
+  name: dave-demo-serv-log-pv
+  storage: 1Gi
+  pvcname: dave-demo-serv-log-pvc
+  storageclassname: manual-storage
+
+mountpath:
+  log: /applogs
+  logconfig: /app/config
+
+volumes:
+    - name: log
+      persistentVolumeClaim:
+        claimName: dave-demo-serv-log-pvc
+    - name: logconfig
+      configMap:
+        name: dave-demo-serv-logconfig
+        defaultMode: 420
+
+volumeMounts:
+  - name: log
+    mountPath: /applogs
+  - name: logconfig
+    mountPath: /app/config
+
+## Resource Variables for the deployment
+resources:
+  limits:
+    cpu: "250m"
+    memory: "350Mi"
+  requests:
+    cpu: "200m"
+    memory: "200Mi"
+    
+## HPA Variables for the HPA template can use CPU or Memory but only one.
+autoscaling:
+  enabled: false
+  ocp4: true
+  minReplicas: 1
+  maxReplicas: 1
+  targetCPUUtilizationPercentage: 80
+
+## Custom variables for Specific use cases with POD Rules.  
+nodeSelector: {}
+tolerations: []
+affinity: {}
