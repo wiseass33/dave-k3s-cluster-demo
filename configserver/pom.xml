@@ -106,5 +106,16 @@
 			</plugin>
 		</plugins>
 	</build>
-
+	<profiles>
+		<!-- DEV Profile -->
+		<profile>
+			<id>dev</id>
+			<properties>
+				<spring.profiles.active>dev</spring.profiles.active>
+			</properties>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+		</profile>
+	</profiles>
 </project>

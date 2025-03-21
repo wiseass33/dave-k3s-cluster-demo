@@ -4,9 +4,12 @@ metadata:
   name: configserver
   labels:
     app: configserver
+    istio-injection: enabled
 spec:
   ports:
-    - port: 8888
+    - name: http
+      protocol: TCP
+      port: 8888
       targetPort: 8888
   selector:
     app: configserver

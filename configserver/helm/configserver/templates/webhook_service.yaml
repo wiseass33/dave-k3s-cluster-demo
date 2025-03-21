@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: configserver-webhook
+spec:
+  type: NodePort  # Or LoadBalancer if using a cloud provider
+  selector:
+    app: configserver
+  ports:
+    - protocol: TCP
+      port: 8888
+      targetPort: 8888
+      nodePort: 30888  # External access for webhook

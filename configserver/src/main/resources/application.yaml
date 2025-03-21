@@ -1,0 +1,21 @@
+server:
+  port: 8888
+spring:
+  profiles:
+    active: native
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/wiseass33/dave-demo-props.git
+          default-label: development
+          search-paths:
+            - "/"                   # Global application.yaml
+            - "{application}"        # Global per-service configs
+            - "{profile}"            # Per-environment configs (Dev, QA, etc.)
+            - "{profile}/{application}"  # Per-service, per-environment configs
+          clone-on-start: true
+    bus:
+      enabled: true
+  rabbitmq:
+    host: rabbitmq-service

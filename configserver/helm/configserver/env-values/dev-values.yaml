@@ -84,7 +84,10 @@ resources:
   requests:
     cpu: "200m"
     memory: "200Mi"
-    
+
+nodeSelector:
+  node-name: cluster-node-01
+
 ## HPA Variables for the HPA template can use CPU or Memory but only one.
 autoscaling:
   enabled: false
@@ -94,6 +97,5 @@ autoscaling:
   targetCPUUtilizationPercentage: 80
 
 ## Custom variables for Specific use cases with POD Rules.  
-nodeSelector: {}
 tolerations: []
 affinity: {}
