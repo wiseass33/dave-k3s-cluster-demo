@@ -5,10 +5,10 @@ metadata:
   name: {{ .Values.service.propsWebhookName }}
 spec:
   type: NodePort  # Or LoadBalancer if using a cloud provider
-  selector:
-    app: configserver
   ports:
     - protocol: TCP
       port: 8888
       targetPort: 8888
       nodePort: 30888
+  selector:
+    app: configserver
