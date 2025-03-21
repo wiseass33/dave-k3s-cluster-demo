@@ -1,7 +1,8 @@
+{{- if not (lookup "v1" "Service" $.Values.nameSpace $.Values.service.istioServiceName) }}
 apiVersion: v1
 kind: Service
 metadata:
-  name: configserver
+  name: {{ .Values.service.istioServiceName }}
   labels:
     app: configserver
     istio-injection: enabled

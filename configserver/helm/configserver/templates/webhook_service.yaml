@@ -1,7 +1,8 @@
+{{- if not (lookup "v1" "Service" $.Values.nameSpace $.Values.service.propsWebhookName) }}
 apiVersion: v1
 kind: Service
 metadata:
-  name: configserver-webhook
+  name: {{ .Values.service.propsWebhookName }}
 spec:
   type: NodePort  # Or LoadBalancer if using a cloud provider
   selector:
