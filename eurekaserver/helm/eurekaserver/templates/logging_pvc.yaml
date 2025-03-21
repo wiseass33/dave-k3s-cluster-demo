@@ -14,4 +14,4 @@ spec:
       storage: {{ .Values.pv_log.storage }}
   storageClassName: {{ .Values.pv_log.storageclassname }} # Must match PV's storageClassName
   volumeName: {{ .Values.pv_log.name }} # Must match the name of the PV
-{{end}}
+{{- end}}

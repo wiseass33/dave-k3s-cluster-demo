@@ -72,4 +72,5 @@ jobs:
         --set imagePullSecrets[0].name=ghcr-secret \
         --set app.version=1 \
         --set app.name=${{ env.APPLICATION_NAME }} \
-        --set image.tag=${{ inputs.IMAGE_TAG }}
+        --set image.tag=${{ inputs.IMAGE_TAG }} \
+        --debug     

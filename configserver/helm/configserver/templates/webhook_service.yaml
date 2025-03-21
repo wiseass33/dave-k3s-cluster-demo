@@ -12,3 +12,4 @@ spec:
       nodePort: 30888
   selector:
     app: configserver
+{{- end }}
