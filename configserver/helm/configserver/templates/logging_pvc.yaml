@@ -1,4 +1,4 @@
-{{- if not (lookup "v1" "PersistentVolumeClaim" $.Values.nameSpace $.Values.pv_log.pvcname) }}
+{{- if not (lookup "v1" "PersistentVolumeClaim" $.Release.Namespace $.Values.pv_log.pvcname) }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:

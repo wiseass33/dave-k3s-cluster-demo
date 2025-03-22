@@ -1,0 +1,18 @@
+{{- if not (lookup "v1" "Service" $.Release.Namespace $.Values.service.rabbitmq) }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.service.rabbitmqName }}
+  namespace: {{ .Values.nameSpace }}
+spec:
+  ports:
+  - port: 5672
+    targetPort: 5672
+    name: amqp
+  - port: 15672
+    targetPort: 15672
+    name: management
+  selector:
+    app: rabbitmq
+{{- end }}
+

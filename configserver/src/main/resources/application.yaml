@@ -17,5 +17,24 @@ spring:
           clone-on-start: true
     bus:
       enabled: true
+      id: my-configserver-bus
+    stream:
+      bindings:
+        refreshIn:
+          destination: configRefreshQueue
+        refreshOut:
+          destination: configRefreshQueue
+          group: dave-demo-service
+          content-type: application/json
+          binder: rabbit
   rabbitmq:
-    host: rabbitmq-service
+    host: rabbitmq
+    port: 5672
+    username: guest
+    password: guest
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

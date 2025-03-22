@@ -48,6 +48,7 @@ service:
   port: 8761
   propsWebhookName: configserver-webhook
   istioServiceName: configserver
+  rabbitmqName: rabbitmq
 
 serviceAccount:
   create: false  # We're not creating a new SA

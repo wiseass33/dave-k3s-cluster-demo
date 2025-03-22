@@ -1,4 +1,4 @@
-{{- if not (lookup "v1" "Service" $.Values.nameSpace $.Values.service.propsWebhookName) }}
+{{- if not (lookup "v1" "Service" $.Release.Namespace $.Values.service.propsWebhookName) }}
 apiVersion: v1
 kind: Service
 metadata:

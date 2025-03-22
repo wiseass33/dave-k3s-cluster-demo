@@ -67,7 +67,7 @@ jobs:
         -f ${{ env.PROJECT_FOLDER_NAME }}/helm/${{ env.APPLICATION_NAME }}/env-values/${{ env.values_file }} \
         ./${{ env.PROJECT_FOLDER_NAME }}/helm/${{ env.APPLICATION_NAME }} \
         --set nameSpace=$NAMESPACE \
-        --namespace $NAMESPACE \
+        --namespace ${NAMESPACE} \
         --history-max 3 \
         --set imagePullSecrets[0].name=ghcr-secret \
         --set app.version=1 \
