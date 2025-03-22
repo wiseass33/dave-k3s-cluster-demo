@@ -1,4 +1,4 @@
-{{- if not (lookup "v1" "Service" $.Release.Namespace $.Values.service.rabbitmqName) }}
+# {{- if not (lookup "v1" "Service" $.Release.Namespace $.Values.service.rabbitmqName) }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -14,5 +14,5 @@ spec:
     name: management
   selector:
     app: rabbitmq
-{{- end }}
+# {{- end }}
 
