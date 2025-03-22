@@ -11,5 +11,5 @@ spec:
       targetPort: 8888
       nodePort: 30888
   selector:
-    app: configserver
+    app.kubernetes.io/name: configserver
 {{- end }}
