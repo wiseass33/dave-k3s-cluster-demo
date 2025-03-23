@@ -14,7 +14,7 @@ spring:
             - "{application}"        # Global per-service configs
             - "{profile}"            # Per-environment configs (Dev, QA, etc.)
             - "{profile}/{application}"  # Per-service, per-environment configs
-          clone-on-start: true
+          cloneOnStart: true
     bus:
       enabled: true
       id: my-configserver-bus

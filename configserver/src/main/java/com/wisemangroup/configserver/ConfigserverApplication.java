@@ -1,4 +1,4 @@
-package com.wisemangroup.eurekaserver;
+package com.wisemangroup.configserver;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
