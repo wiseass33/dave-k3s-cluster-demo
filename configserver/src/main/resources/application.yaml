@@ -7,7 +7,7 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/wiseass33/dave-demo-props.git
+          uri: https://github.com/wiseass33/dave-demo-props
           default-label: development
           search-paths:
             - "/"                   # Global application.yaml
