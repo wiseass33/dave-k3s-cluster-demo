@@ -9,10 +9,13 @@ ENV JAVA_HOME /opt/java/openjdk
 ENV PATH="${JAVA_HOME}/bin:${PATH}"
 
 # Directory for application
-RUN mkdir -p /app
+RUN mkdir -p /app && \
+    mkdir -p /app/config && \
+    mkdir -p /applogs && \
+    mkdir -p /applogs/archive
 
 # Make port 8761 available to the world outside this container
-EXPOSE 8761
+EXPOSE 8888
 # Copy the current directory contents into the container at /app
 COPY target/configserver.jar /app/
 
