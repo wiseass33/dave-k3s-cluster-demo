@@ -28,7 +28,7 @@ spring:
           content-type: application/json
           binder: rabbit
   rabbitmq:
-    host: localhost #Set to localhost for loacl testing and rabbitmq for k3s.
+    host: rabbitmq #Set to "localhost"" for local testing and "rabbitmq" for k3s.
     port: 5672
     username: guest
     password: guest
