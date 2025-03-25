@@ -27,7 +27,7 @@ nameOverride: ""
 fullnameOverride: ""
 
 podAnnotations:
-  sidecar.istio.io/inject: "true"
+  sidecar.istio.io/inject: "false"
 
 ## Security Context Variables
 podSecurityContext:
