@@ -1,8 +1,10 @@
 server:
   port: 8888
 spring:
-  profiles:
-    active: native
+  application:
+    name: configserver
+#  profiles:
+#    active: native
   cloud:
     config:
       server:
@@ -10,11 +12,10 @@ spring:
           uri: https://github.com/wiseass33/dave-demo-props
           default-label: development
           search-paths:
-            - '/'                    # Global application.yaml; changed double quotes to single quotes
-            - '{application}'        # Global per-service configs; changed double quotes to single quotes
-            - '{profile}'            # Per-environment configs (Dev, QA, etc.); changed double quotes to single quotes
-            - '{profile}/{application}'  # Per-service, per-environment configs; changed double quotes to single quotes
-          cloneOnStart: true
+            - "/app-config"            # Global application.yaml; changed double quotes to single quotes
+            - "/app-config/common"     # Global per-service configs; changed double quotes to single quotes
+            - "/app-config/dev"        # Per-service, per-environment configs; changed double quotes to single quotes
+          cloneOnStart: true         # Clone the repositories at startup.
     bus:
       enabled: true  #Changed to "false"" Sunday envening from "true""; no difference so changed back to "true"."
       id: my-configserver-bus
@@ -28,7 +29,7 @@ spring:
           content-type: application/json
           binder: rabbit
   rabbitmq:
-    host: rabbitmq #Set to "localhost"" for local testing and "rabbitmq" for k3s.
+    host: localhost #Set to "localhost"" for local testing and "rabbitmq" for k3s.
     port: 5672
     username: guest
     password: guest
